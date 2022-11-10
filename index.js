@@ -77,6 +77,19 @@ async function run() {
     });
 
     // New services Api
+    app.get("/newServices", async (req, res) => {
+      let query = {};
+
+      if (req.query.email) {
+        query = {
+          email: req.query.email,
+        };
+      }
+      const cursor = newServiceCollection.find(query);
+      const newServices = await cursor.limit(3).toArray();
+      res.send(newServices);
+    });
+
     app.post("/newServices", async (req, res) => {
       const newService = req.body;
       const result = await newServiceCollection.insertOne(newService);
