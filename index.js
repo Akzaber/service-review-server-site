@@ -23,6 +23,9 @@ async function run() {
   try {
     const serviceCollection = client.db("sportsMan").collection("services");
     const reviewCollection = client.db("sportsMan").collection("reviews");
+    const newServiceCollection = client
+      .db("sportsMan")
+      .collection("newServices");
 
     app.get("/serviceshome", async (req, res) => {
       const query = {};
@@ -63,6 +66,20 @@ async function run() {
     app.post("/reviews", async (req, res) => {
       const review = req.body;
       const result = await reviewCollection.insertOne(review);
+      res.send(result);
+    });
+
+    app.delete("/reviews/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await reviewCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    // New services Api
+    app.post("/newServices", async (req, res) => {
+      const newService = req.body;
+      const result = await newServiceCollection.insertOne(newService);
       res.send(result);
     });
   } finally {
